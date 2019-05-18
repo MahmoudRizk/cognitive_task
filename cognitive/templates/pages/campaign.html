@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<nav class="navbar navbar-light bg-light justify-content-between">
+  <a class="navbar-brand">Campaigns Overview</a>
+  <form class="form-inline">
+    <a class="btn btn-info" href="{% url 'campaign:campaign_form' %}">Add</a>
+  </form>
+</nav>
+{% if campaign_list %}
+  <table class="table table-striped">
+    <tr>
+      <td><b>Name</b></td>
+      <td><b>Country</b></td>
+      <td><b>Budget</b></td>
+      <td><b>Goal</b></td>
+      <td><b>Category</b></td>
+    </tr>
+    {% for camp in campaign_list %}
+      <tr>
+        <td>{{camp.name}}</td>
+        <td>{{camp.country}}</td>
+        <td>{{camp.budget}}</td>
+        <td>{{camp.goal}}</td>
+        <td>{{camp.category}}</td>
+      </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+    <p>There are no campigns.</p>
+  {% endif %}
+{% endblock content %}
