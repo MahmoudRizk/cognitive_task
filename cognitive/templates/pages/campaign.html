@@ -6,26 +6,55 @@
     <a class="btn btn-info" href="{% url 'campaign:campaign_form' %}">Add</a>
   </form>
 </nav>
-{% if campaign_list %}
-  <table class="table table-striped">
-    <tr>
-      <td><b>Name</b></td>
-      <td><b>Country</b></td>
-      <td><b>Budget</b></td>
-      <td><b>Goal</b></td>
-      <td><b>Category</b></td>
-    </tr>
-    {% for camp in campaign_list %}
+<div class="p-3 mb-2 bg-light text-dark">
+  {% if campaign_list %}
+    <table class="table table-striped">
       <tr>
-        <td>{{camp.name}}</td>
-        <td>{{camp.country}}</td>
-        <td>{{camp.budget}}</td>
-        <td>{{camp.goal}}</td>
-        <td>{{camp.category}}</td>
+        <td><b>Name</b></td>
+        <td><b>Country</b></td>
+        <td><b>Budget</b></td>
+        <td><b>Goal</b></td>
+        <td><b>Category</b></td>
       </tr>
-    {% endfor %}
-  </table>
-  {% else %}
-    <p>There are no campigns.</p>
+      {% for camp in campaign_list %}
+        <tr>
+          <td>{{camp.name}}</td>
+          <td>{{camp.country}}</td>
+          <td>{{camp.budget}}</td>
+          <td>{{camp.goal}}</td>
+          <td>{{camp.category}}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+      <p>There are no campigns.</p>
+    {% endif %}
+
+    {% if is_paginated %}
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="page-item" class="disabled"><a class="page-link">&laquo;</a></li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+            <li class="page-item" class="active"><a class="page-link">{{ i }} <span class="sr-only">(current)</span></a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="page-item" class="disabled"><a class="page-link">&raquo;</a></li>
+        {% endif %}
+      </ul>
+    </nav>
   {% endif %}
+</div>
+
+<div id="chart-1">{{ output|safe }}</div>
+
 {% endblock content %}

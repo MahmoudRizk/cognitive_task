@@ -2,12 +2,8 @@
 {% block content %}
 <nav class="navbar navbar-light bg-light justify-content-between">
   <a class="navbar-brand">Campaign Form</a>
-  <form class="form-inline">
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <a class="btn btn-warning" href="{% url 'campaign:campaign' %}">Cancel</a>
-  </form>
 </nav>
-<div class="container">
+<div class="container p-3 mb-2 bg-light text-dark">
   <form action="." method="POST" class="form-horizontal">
     {% csrf_token %}
     <div class="form-group">
@@ -35,6 +31,8 @@
       <input type="text" class="form-control" name="category">
     </div>
 
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a class="btn btn-warning" href="{% url 'campaign:campaign' %}">Cancel</a>
   </form>
 
 </div>
