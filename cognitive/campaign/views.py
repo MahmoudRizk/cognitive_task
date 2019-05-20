@@ -8,10 +8,23 @@ from django.db.models import Count
 from campaign.models import Campaign
 from campaign.forms import CampaignForm
 from .fusioncharts import FusionCharts
+from rest_framework import viewsets, generics
+from campaign.serializers import CampaignSeriallizer
 
 
-def campaign(request):
-    return render(request, "pages/campaign.html")
+class CampaignCreate(generics.CreateAPIView):  # API Create new entry
+    queryset = Campaign.objects.all()
+    serializer_class = CampaignSeriallizer
+
+
+class CampaignDetailSet(generics.RetrieveUpdateDestroyAPIView):  # API Update, Delete, View
+    queryset = Campaign.objects.all()
+    serializer_class = CampaignSeriallizer
+
+
+class CampaignViewSet(viewsets.ModelViewSet):  # API View only
+    queryset = Campaign.objects.all()
+    serializer_class = CampaignSeriallizer
 
 
 class CampaignFormView(FormView):
