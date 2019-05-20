@@ -3,6 +3,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
+from django.db.models import Count
 
 from campaign.models import Campaign
 from campaign.forms import CampaignForm
@@ -37,100 +38,55 @@ class CampaignListView(ListView):
 
 
 def chart():
-    column2d = FusionCharts('mscolumn2d', 'ex1', '1050', '400', 'chart-1', 'json', """{
-      "chart": {
-        "caption": "Analysis by country and category",
-        "xaxisname": "Years",
-        "yaxisname": "Total number by category",
-        "formatnumberscale": "1",
-        "plottooltext": "<b>$dataValue</b> campaign of category <b>$seriesName</b> in $label",
-        "theme": "fusion",
-        "drawcrossline": "1"
-      },
-      "categories": [
-        {
-          "category": [
-            {
-              "label": "EGY"
-            },
-            {
-              "label": "USA"
-            },
-            {
-              "label": "KSA"
-            },
-            {
-              "label": "RU"
-            },
-            {
-              "label": "GB"
-            }
-          ]
-        }
-      ],
-      "dataset": [
-        {
-          "seriesname": "Sports",
-          "data": [
-            {
-              "value": "125"
-            },
-            {
-              "value": "300"
-            },
-            {
-              "value": "480"
-            },
-            {
-              "value": "800"
-            },
-            {
-              "value": "110"
-            }
-          ]
-        },
-        {
-          "seriesname": "Tecgnology",
-          "data": [
-            {
-              "value": "700"
-            },
-            {
-              "value": "150"
-            },
-            {
-              "value": "350"
-            },
-            {
-              "value": "600"
-            },
-            {
-              "value": "140"
-            }
-          ]
-        },
-        {
-          "seriesname": "Automotive",
-          "data": [
-            {
-              "value": "100"
-            },
-            {
-              "value": "100"
-            },
-            {
-              "value": "300"
-            },
-            {
-              "value": "600"
-            },
-            {
-              "value": "900"
-            }
-          ]
-        }
-      ]
-    }""")
+    query = Campaign.objects.values('country', 'category').annotate(Count('category'))
+    unique_ctrys = Campaign.objects.values('country').annotate(Count('country'))
+    unique_cats = Campaign.objects.values('category').annotate(Count('category'))
+    report = {}
+    for cat in unique_cats:
+        report[cat['category']] = []
+
+    for q in query:
+        report[q['category']].append({'country': q['country'], 'count': q['category__count']})
+
+    # Constructing the JSON object.
+    countries = [{'category': []}]
+    for ctry in unique_ctrys:
+        countries[0]['category'].append({'label': ctry['country']})
+
+    dataset = []
+    print(report)
+    for r in report:
+        tmp = {}
+        tmp['seriesname'] = r
+        tmp['data'] = []
+        for u in unique_ctrys:
+            tmp['data'].append({'value': 0})
+        dataset.append(tmp)
+
+    for idx, ctry in enumerate(countries[0]['category']):
+           tmp_ctry = ctry['label']
+           for d in dataset:
+               for r in report:
+                   if(r == d['seriesname']):
+                       tmp_count = 0
+                       for t in report[r]:
+                           if t['country'] == tmp_ctry:
+                               tmp_count = t['count']
+                       d['data'][idx]['value'] = tmp_count
+
+    data_json = {'chart': {
+                    "caption": "Analysis by country and category",
+                    "xaxisname": "Years",
+                    "yaxisname": "Total number by category",
+                    "formatnumberscale": 1,
+                    "plottooltext": "<b>$dataValue</b> campaign of category <b>$seriesName</b> in $label",
+                    "theme": "fusion",
+                    "drawcrossline": 1
+                           },
+                 'categories': countries,
+                 'dataset': dataset,
+                 }
+
+    column2d = FusionCharts('mscolumn2d', 'ex1', '1050', '400', 'chart-1', 'json', data_json)
 
     return column2d.render()
-    # return render(request, 'pages/campaign.html', {'output': column2d.render()})
