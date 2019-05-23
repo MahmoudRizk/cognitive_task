@@ -210,7 +210,7 @@ keys
 +------------+---------------------------+------------+
 | Name       | Description               | Required   |
 +============+===========================+============+
-| id         | database unique id        | True       |
+| id         | database unique id        | False      |
 +------------+---------------------------+------------+
 | name       | name of the campaign      | True       |
 +------------+---------------------------+------------+
@@ -245,3 +245,12 @@ Example Response
       "goal": "Awareness",
       "category": "Sports"
     }
+
+Testing
+----------
+
+To run the tests, check your test coverage, and generate an HTML coverage report::
+
+    $ coverage run manage.py test campaign
+    $ coverage html
+    $ open htmlcov/index.html
