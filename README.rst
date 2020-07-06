@@ -1,4 +1,4 @@
-cognitive_task
+sample_django
 ==============
 
 A service with both GUI & API interfaces built with Python, Django & FusionCharts.
@@ -110,7 +110,7 @@ Resource URL
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 ::
 
-    https://cognitive-task.herokuapp.com/campaign/api/
+    https://sample-django-123.herokuapp.com/campaign/api/
 
 Resource Information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,7 +143,7 @@ Example Requests
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 ::
 
-    $ curl --request GET --url 'https://cognitive-task.herokuapp.com/campaign/api/'
+    $ curl --request GET --url 'https://sample-django-123.herokuapp.com/campaign/api/'
 
 
 Example Response
@@ -193,7 +193,7 @@ Resource URL
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 ::
 
-    https://cognitive-task.herokuapp.com/campaign/api/create/
+    https://sample-django-123.herokuapp.com/campaign/api/create/
 
 Resource Information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -231,7 +231,7 @@ Example Requests
     $ curl --header "Content-Type: application/json"\
            --request POST \
            --data '{"name":"xyz","country":"EGY","budget":"199","goal":"Awareness","category":"Sports"}' \
-           https://cognitive-task.herokuapp.com/campaign/api/create/
+           https://sample-django-123.herokuapp.com/campaign/api/create/
 
 Example Response
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
